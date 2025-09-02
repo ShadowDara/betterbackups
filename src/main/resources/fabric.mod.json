@@ -3,15 +3,15 @@
 	"id": "betterbackups",
 	"version": "${version}",
 	"name": "betterbackups",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "a mod to view your created backups without need to open the explorer",
 	"authors": [
-		"Me!"
+		"shadowdara"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://modrinth.com/mod/betterbackups",
+		"sources": "https://github.com/shadowdara/betterbackups"
 	},
-	"license": "CC0-1.0",
+	"license": "MIT",
 	"icon": "assets/betterbackups/icon.png",
 	"environment": "*",
 	"entrypoints": {

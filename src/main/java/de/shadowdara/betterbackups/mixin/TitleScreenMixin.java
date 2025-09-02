@@ -1,5 +1,7 @@
 package de.shadowdara.betterbackups.mixin;
 
+import de.shadowdara.betterbackups.screen.BackupScreen;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.text.Text;
@@ -21,7 +23,7 @@ public class TitleScreenMixin extends Screen {
         this.addDrawableChild(ButtonWidget.builder(
                         Text.translatable("button.betterbackups.backup"),
                         button -> {
-                            // Dein Code hier – z. B. neues Screen öffnen oder Logik ausführen
+                            MinecraftClient.getInstance().setScreen(new BackupScreen());
                             System.out.println("Backup-Button wurde gedrückt!");
                         })
                 //.dimensions(this.width / 2 - 100, this.height / 4 + 120, 200, 20)

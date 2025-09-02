@@ -1,4 +1,4 @@
-package de.shadowdara;
+package de.shadowdara.betterbackups;
 
 import net.fabricmc.api.ModInitializer;
 

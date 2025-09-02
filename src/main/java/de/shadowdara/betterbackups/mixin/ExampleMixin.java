@@ -1,4 +1,4 @@
-package de.shadowdara.mixin;
+package de.shadowdara.betterbackups.mixin;
 
 import net.minecraft.server.MinecraftServer;
 import org.spongepowered.asm.mixin.Mixin;

@@ -16,11 +16,14 @@
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"de.shadowdara.Betterbackups"
+			"de.shadowdara.betterbackups.Betterbackups"
 		],
 		"fabric-datagen": [
-			"de.shadowdara.BetterbackupsDataGenerator"
-		]
+			"de.shadowdara.betterbackups.BetterbackupsDataGenerator"
+		],
+        "client":  [
+          "de.shadowdara.betterbackups.BetterbackupsClient"
+        ]
 	},
 	"mixins": [
 		"betterbackups.mixins.json"

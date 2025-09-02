@@ -1,4 +1,4 @@
-package de.shadowdara;
+package de.shadowdara.betterbackups;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;

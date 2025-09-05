@@ -41,7 +41,7 @@ public class BackupScreen extends Screen {
                 }
             }
         } else {
-            backups.add("Keine Backups gefunden.");
+            backups.add(String.valueOf(Text.translatable("message.betterbackups.notfound")));
         }
     }
 

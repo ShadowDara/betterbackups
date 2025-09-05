@@ -1,5 +1,7 @@
 {
   "button.betterbackups.backup": "Backups",
 
-  "screen.betterbackups.title": "Backup Menu"
+  "screen.betterbackups.title": "Backup Menu",
+
+  "message.betterbackups.notfound": "No backups found!"
 }

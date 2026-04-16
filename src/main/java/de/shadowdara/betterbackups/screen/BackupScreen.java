@@ -12,6 +12,9 @@ import java.util.List;
 
 public class BackupScreen extends Screen {
 
+    // Size of the Backup Folder
+    private long totalBackupSize = 0L;
+
     private final List<String> backups = new ArrayList<>();
     private static final File BACKUP_FOLDER = new File("backups"); // anpassen falls nötig
 
@@ -51,7 +54,7 @@ public class BackupScreen extends Screen {
 
     private void loadBackups() {
         backups.clear();
-
+        totalBackupSize = 0L;
 
         // Print the Backup List or that no Backup was found
         if (BACKUP_FOLDER.exists() && BACKUP_FOLDER.isDirectory()) {
@@ -61,6 +64,10 @@ public class BackupScreen extends Screen {
             if (files != null && files.length > 0) {
                 for (File file : files) {
                     long size = getFileSize(file);
+
+                    // Add to the total BackupSize
+                    totalBackupSize += size;
+
                     backups.add(file.getName() + " (" +
                             humanReadableByteCount(size) + ")");
                 }
@@ -113,6 +120,19 @@ public class BackupScreen extends Screen {
                     this.width / 2 - 100, y, 0xAAAAAA);
             y += 12; // Zeilenabstand
         }
+
+        // Gesamtgröße anzeigen
+        String totalSizeText = Text.translatable(
+                "screen.betterbackups.foldersize").getString() + " " +
+                humanReadableByteCount(totalBackupSize);
+
+        context.drawCenteredTextWithShadow(
+                this.textRenderer,
+                totalSizeText,
+                this.width / 2,
+                this.height - 20, // 👈 unten im Screen
+                0xFFFFFF
+        );
 
         super.render(context, mouseX, mouseY, delta);
     }

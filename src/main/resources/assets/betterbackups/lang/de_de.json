@@ -5,6 +5,8 @@
 
   "screen.betterbackups.openfolder": "Sicherungsordner öffnen",
 
+  "screen.betterbackups.foldersize": "Ordner Größe:",
+
   "message.betterbackups.notfound": "Keine Backups gefunden!"
 }
 

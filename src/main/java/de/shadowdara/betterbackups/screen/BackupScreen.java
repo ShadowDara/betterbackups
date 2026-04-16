@@ -21,10 +21,29 @@ public class BackupScreen extends Screen {
 
     @Override
     protected void init() {
+        // Back Button in the Backups Menu
         this.addDrawableChild(ButtonWidget.builder(
                 Text.translatable("gui.back"),
                 button -> this.close()
-        ).dimensions(this.width / 2 - 100, this.height / 2 + 40, 200, 20).build());
+        ).dimensions(this.width / 2 - 100, this.height / 2 + 40,
+                200, 20).build());
+
+        // Open the Backup Folder
+        this.addDrawableChild(ButtonWidget.builder(
+                Text.translatable("screen.betterbackups.openfolder"),
+                button -> {
+                    try {
+                        if (!BACKUP_FOLDER.exists()) {
+                            BACKUP_FOLDER.mkdirs();
+                        }
+
+                        net.minecraft.util.Util.getOperatingSystem().open(BACKUP_FOLDER);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+        ).dimensions(this.width / 2 - 100, this.height / 2 + 70,
+                200, 20).build());
 
         // Backups einlesen
         this.loadBackups();
@@ -32,19 +51,31 @@ public class BackupScreen extends Screen {
 
     private void loadBackups() {
         backups.clear();
+
+
+        // Print the Backup List or that no Backup was found
         if (BACKUP_FOLDER.exists() && BACKUP_FOLDER.isDirectory()) {
+
             File[] files = BACKUP_FOLDER.listFiles();
-            if (files != null) {
+
+            if (files != null && files.length > 0) {
                 for (File file : files) {
                     long size = getFileSize(file);
-                    backups.add(file.getName() + " (" + humanReadableByteCount(size) + ")");
+                    backups.add(file.getName() + " (" +
+                            humanReadableByteCount(size) + ")");
                 }
+            } else {
+                backups.add(Text.translatable(
+                        "message.betterbackups.notfound").getString());
             }
+
         } else {
-            backups.add(String.valueOf(Text.translatable("message.betterbackups.notfound")));
+            backups.add(Text.translatable(
+                    "message.betterbackups.notfound").getString());
         }
     }
 
+    // Get Backup FileSize
     private long getFileSize(File file) {
         if (file.isFile()) {
             return file.length();
@@ -65,18 +96,21 @@ public class BackupScreen extends Screen {
         if (bytes < 1024) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(1024));
         char pre = "KMGTPE".charAt(exp - 1);
-        return new DecimalFormat("#.##").format(bytes / Math.pow(1024, exp)) + " " + pre + "B";
+        return new DecimalFormat("#.##").format(
+                bytes / Math.pow(1024, exp)) + " " + pre + "B";
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context);
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title, this.width / 2, 20, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(this.textRenderer, this.title,
+                this.width / 2, 20, 0xFFFFFF);
 
         // Backups rendern
         int y = 50;
         for (String backup : backups) {
-            context.drawTextWithShadow(this.textRenderer, backup, this.width / 2 - 100, y, 0xAAAAAA);
+            context.drawTextWithShadow(this.textRenderer, backup,
+                    this.width / 2 - 100, y, 0xAAAAAA);
             y += 12; // Zeilenabstand
         }
 

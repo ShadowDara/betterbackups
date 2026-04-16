@@ -3,6 +3,8 @@
 
   "screen.betterbackups.title": "Sicherungs Menu",
 
+  "screen.betterbackups.openfolder": "Sicherungsordner öffnen",
+
   "message.betterbackups.notfound": "Keine Backups gefunden!"
 }
 

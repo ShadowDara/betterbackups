@@ -18,6 +18,7 @@ public class BackupScreen extends Screen {
     private final List<String> backups = new ArrayList<>();
     private static final File BACKUP_FOLDER = new File("backups"); // anpassen falls nötig
 
+    // Class Konstruktor
     public BackupScreen() {
         super(Text.translatable("screen.betterbackups.title"));
     }
@@ -28,7 +29,7 @@ public class BackupScreen extends Screen {
         this.addDrawableChild(ButtonWidget.builder(
                 Text.translatable("gui.back"),
                 button -> this.close()
-        ).dimensions(this.width / 2 - 100, this.height / 2 + 40,
+        ).dimensions(this.width / 2 - 100, this.height - 75,
                 200, 20).build());
 
         // Open the Backup Folder
@@ -45,7 +46,7 @@ public class BackupScreen extends Screen {
                         e.printStackTrace();
                     }
                 }
-        ).dimensions(this.width / 2 - 100, this.height / 2 + 70,
+        ).dimensions(this.width / 2 - 100, this.height - 50,
                 200, 20).build());
 
         // Backups einlesen
@@ -70,6 +71,7 @@ public class BackupScreen extends Screen {
 
                     backups.add(file.getName() + " (" +
                             humanReadableByteCount(size) + ")");
+                    backups.add("");
                 }
             } else {
                 backups.add(Text.translatable(

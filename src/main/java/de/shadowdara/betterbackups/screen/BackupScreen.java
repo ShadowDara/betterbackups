@@ -4,6 +4,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
+import net.minecraft.client.gui.screen.ConfirmScreen;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -15,7 +16,9 @@ public class BackupScreen extends Screen {
     // Size of the Backup Folder
     private long totalBackupSize = 0L;
 
-    private final List<String> backups = new ArrayList<>();
+    private BackupListWidget listWidget;
+
+    private final List<File> backups = new ArrayList<>();
     private static final File BACKUP_FOLDER = new File("backups"); // anpassen falls nötig
 
     // Class Konstruktor
@@ -25,39 +28,49 @@ public class BackupScreen extends Screen {
 
     @Override
     protected void init() {
-        // Back Button in the Backups Menu
+
+        int listWidth = 420; // 👈 breiter machen (Standard ~300)
+        int left = (this.width - listWidth) / 2;
+
+        this.listWidget = new BackupListWidget(
+                this.client,
+                listWidth,
+                this.height,
+                40,                     // top
+                this.height - 80,       // bottom
+                24                      // entry height
+        );
+
+        // WICHTIG:
+        //this.listWidget.setX(left);
+
+        this.loadBackups();
+
+        for (File file : backups) {
+            if (file != null) {
+                listWidget.addBackup(file);
+            }
+        }
+
+        this.addSelectableChild(listWidget);
+
+        // Back button
         this.addDrawableChild(ButtonWidget.builder(
                 Text.translatable("gui.back"),
-                button -> this.close()
-        ).dimensions(this.width / 2 - 100, this.height - 75,
-                200, 20).build());
+                b -> this.close()
+        ).dimensions(this.width / 2 - 100, this.height - 70, 200, 20).build());
 
-        // Open the Backup Folder
+        // Open folder button
         this.addDrawableChild(ButtonWidget.builder(
-                Text.translatable("screen.betterbackups.openfolder"),
-                button -> {
-                    try {
-                        if (!BACKUP_FOLDER.exists()) {
-                            BACKUP_FOLDER.mkdirs();
-                        }
-
-                        net.minecraft.util.Util.getOperatingSystem().open(BACKUP_FOLDER);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-        ).dimensions(this.width / 2 - 100, this.height - 50,
-                200, 20).build());
-
-        // Backups einlesen
-        this.loadBackups();
+                Text.literal("Open Backup Folder"),
+                b -> net.minecraft.util.Util.getOperatingSystem().open(BACKUP_FOLDER)
+        ).dimensions(this.width / 2 - 100, this.height - 45, 200, 20).build());
     }
 
     private void loadBackups() {
         backups.clear();
         totalBackupSize = 0L;
 
-        // Print the Backup List or that no Backup was found
         if (BACKUP_FOLDER.exists() && BACKUP_FOLDER.isDirectory()) {
 
             File[] files = BACKUP_FOLDER.listFiles();
@@ -65,27 +78,21 @@ public class BackupScreen extends Screen {
             if (files != null && files.length > 0) {
                 for (File file : files) {
                     long size = getFileSize(file);
-
-                    // Add to the total BackupSize
                     totalBackupSize += size;
 
-                    backups.add(file.getName() + " (" +
-                            humanReadableByteCount(size) + ")");
-                    backups.add("");
+                    backups.add(file); // 👈 jetzt File speichern
                 }
             } else {
-                backups.add(Text.translatable(
-                        "message.betterbackups.notfound").getString());
+                backups.add(null); // Marker für "leer"
             }
 
         } else {
-            backups.add(Text.translatable(
-                    "message.betterbackups.notfound").getString());
+            backups.add(null);
         }
     }
 
     // Get Backup FileSize
-    private long getFileSize(File file) {
+    public static long getFileSize(File file) {
         if (file.isFile()) {
             return file.length();
         } else if (file.isDirectory()) {
@@ -101,7 +108,8 @@ public class BackupScreen extends Screen {
         return 0L;
     }
 
-    private String humanReadableByteCount(long bytes) {
+    // Convert Bytes into Human readable Count
+    public static String humanReadableByteCount(long bytes) {
         if (bytes < 1024) return bytes + " B";
         int exp = (int) (Math.log(bytes) / Math.log(1024));
         char pre = "KMGTPE".charAt(exp - 1);
@@ -112,27 +120,23 @@ public class BackupScreen extends Screen {
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         this.renderBackground(context);
-        context.drawCenteredTextWithShadow(this.textRenderer, this.title,
-                this.width / 2, 20, 0xFFFFFF);
-
-        // Backups rendern
-        int y = 50;
-        for (String backup : backups) {
-            context.drawTextWithShadow(this.textRenderer, backup,
-                    this.width / 2 - 100, y, 0xAAAAAA);
-            y += 12; // Zeilenabstand
-        }
-
-        // Gesamtgröße anzeigen
-        String totalSizeText = Text.translatable(
-                "screen.betterbackups.foldersize").getString() + " " +
-                humanReadableByteCount(totalBackupSize);
 
         context.drawCenteredTextWithShadow(
                 this.textRenderer,
-                totalSizeText,
+                this.title,
                 this.width / 2,
-                this.height - 20, // 👈 unten im Screen
+                15,
+                0xFFFFFF
+        );
+
+        listWidget.render(context, mouseX, mouseY, delta);
+
+        // Folder size bottom
+        context.drawCenteredTextWithShadow(
+                this.textRenderer,
+                "Folder Size: " + humanReadableByteCount(totalBackupSize),
+                this.width / 2,
+                this.height - 20,
                 0xFFFFFF
         );
 

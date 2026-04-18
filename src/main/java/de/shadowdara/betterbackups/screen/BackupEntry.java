@@ -35,7 +35,7 @@ public class BackupEntry extends ElementListWidget.Entry<BackupEntry> {
                                     MinecraftClient.getInstance().setScreen(new BackupScreen());
                                 }
                             },
-                                    Text.literal("Delete Backup"),
+                                    Text.translatable("button.betterbackups.delete"),
                                     Text.literal(file.getName()))
                     );
                 }

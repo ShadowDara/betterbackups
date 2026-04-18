@@ -62,7 +62,7 @@ public class BackupScreen extends Screen {
 
         // Open folder button
         this.addDrawableChild(ButtonWidget.builder(
-                Text.literal("Open Backup Folder"),
+                Text.translatable("screen.betterbackups.openfolder"),
                 b -> net.minecraft.util.Util.getOperatingSystem().open(BACKUP_FOLDER)
         ).dimensions(this.width / 2 - 100, this.height - 45, 200, 20).build());
     }

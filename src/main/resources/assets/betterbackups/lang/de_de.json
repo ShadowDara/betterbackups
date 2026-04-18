@@ -1,6 +1,8 @@
 {
   "button.betterbackups.backup": "Sicherung",
 
+  "button.betterbackups.delete": "Sicherung löschen",
+
   "screen.betterbackups.title": "Sicherungs Menu",
 
   "screen.betterbackups.openfolder": "Sicherungsordner öffnen",

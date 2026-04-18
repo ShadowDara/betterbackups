@@ -1,6 +1,8 @@
 {
   "button.betterbackups.backup": "Backups",
 
+  "button.betterbackups.delete": "Delete Backup",
+
   "screen.betterbackups.title": "Backup Menu",
 
   "screen.betterbackups.openfolder": "open Backup Folder",
